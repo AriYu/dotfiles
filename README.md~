@@ -1,5 +1,0 @@
-# dotfiles
-
-curl -L raw.github.com/Ariyu/dotfiles/master/install.sh | bash
-
-## .emacs.d
