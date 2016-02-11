@@ -16,6 +16,8 @@ sudo apt-get install checkinstall
 ## preparation
 
 ```bash
+sudo apt-get install python-pip
+sudo pip install virtualenv
 curl -fsSkL https://raw.github.com/cask/cask/master/go | python
 cd ~/.emacs.d
 cask upgrade
@@ -26,4 +28,8 @@ cask install
 ```
 cd ~/.emacs.d
 EMACS="emacs-24.4" cask install
+```
+run emacs,
+```
+M-x jedi:install-server
 ```
