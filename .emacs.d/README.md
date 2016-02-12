@@ -19,9 +19,7 @@ sudo apt-get install checkinstall
 sudo apt-get install python-pip
 sudo pip install virtualenv
 curl -fsSkL https://raw.github.com/cask/cask/master/go | python
-cd ~/.emacs.d
-cask upgrade
-cask install
+
 ```
 
 ## How to use
@@ -31,5 +29,24 @@ EMACS="emacs-24.4" cask install
 ```
 run emacs,
 ```
+M-x jedi:install-server
+```
+
+## If you get error
+
+### update pip
+```
+sudo pip install --upgrade pip
+```
+
+### remove old version Emacs
+```
+sudo apt-get remove emacs23
+```
+then, you shuld install emacs24.4 or higher
+
+### Permission denied
+```
+sudo emacs
 M-x jedi:install-server
 ```
