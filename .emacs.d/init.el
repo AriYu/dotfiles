@@ -322,12 +322,21 @@
                         (setq tab-width 4)))
 
 ;; helm
-(require 'helm-config)
-(helm-mode 1)
-(define-key global-map (kbd "C-x C-f") 'helm-find-files)
-(define-key global-map (kbd "M-x")     'helm-M-x)
-(define-key helm-find-files-map (kbd "TAB") 'helm-execute-persistent-action)
-(define-key helm-read-file-map (kbd "<tab>") 'helm-execute-persistent-action)
+;; (require 'helm-config)
+;; (helm-mode 1)
+;; (define-key global-map (kbd "C-x C-f") 'helm-find-files)
+;; (define-key global-map (kbd "M-x")     'helm-M-x)
+;; (define-key helm-find-files-map (kbd "TAB") 'helm-execute-persistent-action)
+;; (define-key helm-read-file-map (kbd "<tab>") 'helm-execute-persistent-action)
+
+(zlc-mode 1)
+(let ((map minibuffer-local-map))
+  (define-key map (kbd "<down>")  'zlc-select-next-vertical)
+  (define-key map (kbd "<up>")    'zlc-select-previous-vertical)
+  (define-key map (kbd "<right>") 'zlc-select-next)
+  (define-key map (kbd "<left>")  'zlc-select-previous)
+  (define-key map (kbd "M-<tab>") 'zlc-select-previous)
+  (define-key map (kbd "M-TAB") 'zlc-select-previous))
 
 ;; for arduino-mode
 (require 'arduino-mode)
