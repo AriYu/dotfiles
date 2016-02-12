@@ -30,6 +30,7 @@ EMACS="emacs-24.4" cask install
 run emacs,
 ```
 M-x jedi:install-server
+M-x irony-server-install
 ```
 
 ## If you get error
