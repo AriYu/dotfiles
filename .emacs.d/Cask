@@ -21,6 +21,7 @@
 (depends-on "ido-ubiquitous")
 (depends-on "irony")
 (depends-on "magit")
+(depends-on "markdown-mode")
 (depends-on "monokai-theme")
 (depends-on "multiple-cursors")
 (depends-on "nyan-mode")
