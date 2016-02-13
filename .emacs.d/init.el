@@ -66,16 +66,6 @@
  ;; If there is more than one, they won't work right.
  '(default ((t (:family "Ricty for Powerline" :foundry "unknown" :slant normal :weight normal :height 128 :width normal)))))
 
-;;; color-theme
-(load-theme 'monokai t)
-
-;; 画面の下の方を綺麗にする
-(require 'powerline)
-(powerline-default-theme)
-(set-face-attribute 'mode-line nil
-                    :foreground "White"
-                    :background "DarkCyan"
-                    :box nil)
 
 ;; ido
 (ido-mode t)
@@ -167,34 +157,47 @@
                (ansi-color-apply-on-region start-marker end-marker))))
 
 ;; elscreen.el
-;;; プレフィクスキーはC-z
-;; (setq elscreen-prefix-key (kbd "C-z"))
-;; (elscreen-start)
-;; ;;; タブの先頭に[X]を表示しない
-;; (setq elscreen-tab-display-kill-screen nil)
-;; ;;; header-lineの先頭に[<->]を表示しない
-;; (setq elscreen-tab-display-control nil)
-;; ;;; バッファ名・モード名からタブに表示させる内容を決定する(デフォルト設定)
-;; (setq elscreen-buffer-to-nickname-alist
-;;       '(("^dired-mode$" .
-;;          (lambda ()
-;;            (format "Dired(%s)" dired-directory)))
-;;         ("^Info-mode$" .
-;;          (lambda ()
-;;            (format "Info(%s)" (file-name-nondirectory Info-current-file))))
-;;         ("^mew-draft-mode$" .
-;;          (lambda ()
-;;            (format "Mew(%s)" (buffer-name (current-buffer)))))
-;;         ("^mew-" . "Mew")
-;;         ("^irchat-" . "IRChat")
-;;         ("^liece-" . "Liece")
-;;         ("^lookup-" . "Lookup")))
-;; (setq elscreen-mode-to-nickname-alist
-;;       '(("[Ss]hell" . "shell")
-;;         ("compilation" . "compile")
-;;         ("-telnet" . "telnet")
-;;         ("dict" . "OnlineDict")
-;;         ("*WL:Message*" . "Wanderlust")))
+;;プレフィクスキーはC-z
+(setq elscreen-prefix-key (kbd "C-z"))
+(elscreen-start)
+;;; タブの先頭に[X]を表示しない
+(setq elscreen-tab-display-kill-screen nil)
+;;; header-lineの先頭に[<->]を表示しない
+(setq elscreen-tab-display-control nil)
+;;; バッファ名・モード名からタブに表示させる内容を決定する(デフォルト設定)
+(setq elscreen-buffer-to-nickname-alist
+      '(("^dired-mode$" .
+         (lambda ()
+           (format "Dired(%s)" dired-directory)))
+        ("^Info-mode$" .
+         (lambda ()
+           (format "Info(%s)" (file-name-nondirectory Info-current-file))))
+        ("^mew-draft-mode$" .
+         (lambda ()
+           (format "Mew(%s)" (buffer-name (current-buffer)))))
+        ("^mew-" . "Mew")
+        ("^irchat-" . "IRChat")
+        ("^liece-" . "Liece")
+        ("^lookup-" . "Lookup")))
+(setq elscreen-mode-to-nickname-alist
+      '(("[Ss]hell" . "shell")
+        ("compilation" . "compile")
+        ("-telnet" . "telnet")
+        ("dict" . "OnlineDict")
+        ("*WL:Message*" . "Wanderlust")))
+
+
+;;; color-theme
+(load-theme 'monokai t)
+
+;; 画面の下の方を綺麗にする
+(require 'powerline)
+(powerline-default-theme)
+(set-face-attribute 'mode-line nil
+                    :foreground "White"
+                    :background "DarkCyan"
+                    :box nil)
+
 
 ;; smartparent
 (smartparens-global-mode)
