@@ -73,6 +73,7 @@
 (ido-ubiquitous-mode 1)
 (global-set-key (kbd "M-x") 'smex)
 (global-set-key (kbd "M-X") 'smex-major-mode-commands)
+(setq ido-cannot-complete-command 'ido-next-match)
 
 ;; smooth-scroll
 (require 'smooth-scroll)
