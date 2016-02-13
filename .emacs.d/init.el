@@ -66,11 +66,22 @@
  ;; If there is more than one, they won't work right.
  '(default ((t (:family "Ricty for Powerline" :foundry "unknown" :slant normal :weight normal :height 128 :width normal)))))
 
+;;; color-theme
+(load-theme 'monokai t)
+
+;; 画面の下の方を綺麗にする
+(require 'powerline)
+(powerline-default-theme)
+(set-face-attribute 'mode-line nil
+                    :foreground "White"
+                    :background "DarkCyan"
+                    :box nil)
+
 ;; ido
 (ido-mode t)
-(ido-everywhere 1)
-(require 'ido-ubiquitous)
-(ido-ubiquitous-mode 1)
+;; (ido-everywhere 1)
+;; (require 'ido-ubiquitous)
+;; (ido-ubiquitous-mode 1)
 (global-set-key (kbd "M-x") 'smex)
 (global-set-key (kbd "M-X") 'smex-major-mode-commands)
 (setq ido-cannot-complete-command 'ido-next-match)
@@ -86,18 +97,21 @@
 (setq auto-mode-alist
       (cons (cons "\\.tex$" 'yatex-mode)  auto-mode-alist))
 (autoload 'yatex-mode "yatex" "Yet Another LaTeX mode" t)
-(setq load-path (cons (expand-file-name "~/.emacs.d/site-lisp/yatex") load-path))
 (setq YaTeX-inhibit-prefix-letter t)
 (setq YaTeX-kanji-code nil)
 (setq YaTeX-latex-message-code 'utf-8)
 ;; Yatexの自動改行をなしにする．
 (add-hook 'yatex-mode-hook
 		  '(lambda () (auto-fill-mode -1)))
-
 ;;;(setq tex-command "latexmk -pvc")  ;;保存したら自動で再コンパイル
-;; 強制コンパイル
-(setq tex-command "latexmk -f") 
+(setq tex-command "latexmk -f") ;; 強制コンパイル
 (setq dvi2-command "evince")
+(add-hook 'yatex-mode-hook
+      #'(lambda ()
+          (define-key YaTeX-mode-map (kbd "C-c c") 'compile) ;;C-c c でmake できるようにする
+          (auto-complete-mode t)
+	  (setq compile-command "latexmk -f") 
+          ))
 ;;; inverse search
 (require 'dbus)
 (defun un-urlify (fname-or-url)
@@ -126,9 +140,10 @@
 ;;; popwin
 (require 'popwin)
 (popwin-mode 1)
-;;; popwin(for yatex)
-;; (require 'popwin-yatex)
-;; (push '("*YaTeX-typesetting*") popwin:special-display-config)
+(setq display-buffer-function 'popwin:display-buffer)
+
+;;コンパイル画面でスクロールする
+(setq compilation-scroll-output t)
 
 ;; 指定したディレクトリでM-xをやる 
 (defun in-directory (dir)
@@ -153,33 +168,33 @@
 
 ;; elscreen.el
 ;;; プレフィクスキーはC-z
-(setq elscreen-prefix-key (kbd "C-z"))
-(elscreen-start)
-;;; タブの先頭に[X]を表示しない
-(setq elscreen-tab-display-kill-screen nil)
-;;; header-lineの先頭に[<->]を表示しない
-(setq elscreen-tab-display-control nil)
-;;; バッファ名・モード名からタブに表示させる内容を決定する(デフォルト設定)
-(setq elscreen-buffer-to-nickname-alist
-      '(("^dired-mode$" .
-         (lambda ()
-           (format "Dired(%s)" dired-directory)))
-        ("^Info-mode$" .
-         (lambda ()
-           (format "Info(%s)" (file-name-nondirectory Info-current-file))))
-        ("^mew-draft-mode$" .
-         (lambda ()
-           (format "Mew(%s)" (buffer-name (current-buffer)))))
-        ("^mew-" . "Mew")
-        ("^irchat-" . "IRChat")
-        ("^liece-" . "Liece")
-        ("^lookup-" . "Lookup")))
-(setq elscreen-mode-to-nickname-alist
-      '(("[Ss]hell" . "shell")
-        ("compilation" . "compile")
-        ("-telnet" . "telnet")
-        ("dict" . "OnlineDict")
-        ("*WL:Message*" . "Wanderlust")))
+;; (setq elscreen-prefix-key (kbd "C-z"))
+;; (elscreen-start)
+;; ;;; タブの先頭に[X]を表示しない
+;; (setq elscreen-tab-display-kill-screen nil)
+;; ;;; header-lineの先頭に[<->]を表示しない
+;; (setq elscreen-tab-display-control nil)
+;; ;;; バッファ名・モード名からタブに表示させる内容を決定する(デフォルト設定)
+;; (setq elscreen-buffer-to-nickname-alist
+;;       '(("^dired-mode$" .
+;;          (lambda ()
+;;            (format "Dired(%s)" dired-directory)))
+;;         ("^Info-mode$" .
+;;          (lambda ()
+;;            (format "Info(%s)" (file-name-nondirectory Info-current-file))))
+;;         ("^mew-draft-mode$" .
+;;          (lambda ()
+;;            (format "Mew(%s)" (buffer-name (current-buffer)))))
+;;         ("^mew-" . "Mew")
+;;         ("^irchat-" . "IRChat")
+;;         ("^liece-" . "Liece")
+;;         ("^lookup-" . "Lookup")))
+;; (setq elscreen-mode-to-nickname-alist
+;;       '(("[Ss]hell" . "shell")
+;;         ("compilation" . "compile")
+;;         ("-telnet" . "telnet")
+;;         ("dict" . "OnlineDict")
+;;         ("*WL:Message*" . "Wanderlust")))
 
 ;; smartparent
 (smartparens-global-mode)
@@ -232,22 +247,14 @@
 ;; 別のwindowに移動するキーバインド
 (global-set-key "\C-t" 'other-window)
 
-;;; color-theme
-(load-theme 'monokai t)
-
-;; 画面の下の方を綺麗にする
-(require 'powerline)
-(powerline-default-theme)
-(set-face-attribute 'mode-line nil
-                    :foreground "White"
-                    :background "DarkCyan"
-                    :box nil)
-
 ;; yasnippet
 (require 'yasnippet)
-(setq yas-snippet-dirs
-      '("~/.emacs.d/yasnippet-snippets"
-        ))
+;; (setq yas-snippet-dirs
+;;       '("~/.emacs.d/yasnippet-snippets"
+;;         ))
+;; (yas-load-directory (concat (cask-dependency-path cask-bundle 'yasnippet)
+;;                             "/snippets"))
+;; (cask-dependency-path cask-bundle 'yasnippet)
 (eval-after-load "yasnippet"
   '(progn
      ;; companyと競合するのでyasnippetのフィールド移動は "C-i" のみにする
@@ -343,3 +350,16 @@
 
 ;; Activate irony-mode on arudino-mode
 (add-hook 'arduino-mode-hook 'irony-mode)
+
+;; Add yasnippet support for all company backends
+;; https://github.com/syl20bnr/spacemacs/pull/179
+(defvar company-mode/enable-yas t
+  "Enable yasnippet for all backends.")
+
+(defun company-mode/backend-with-yas (backend)
+  (if (or (not company-mode/enable-yas) (and (listp backend) (member 'company-yasnippet backend)))
+      backend
+    (append (if (consp backend) backend (list backend))
+            '(:with company-yasnippet))))
+
+(setq company-backends (mapcar #'company-mode/backend-with-yas company-backends))
