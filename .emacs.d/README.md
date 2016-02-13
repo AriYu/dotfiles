@@ -1,6 +1,9 @@
 # my .emacs.d
 
-## require
+This .emacs.d assume you use `C++`, `Python`, `Latex`.
+And, this is managed by Cask and Pallet.
+
+## Require
 emacs 24.4 or later
 
 By default on Ubuntu 14.04, emacs24.3 will be install via apt.  
@@ -8,18 +11,17 @@ So, you should install using follow url.
 http://ubuntuhandbook.org/index.php/2014/10/emacs-24-4-released-install-in-ubuntu-14-04/  
 And, finally, you do not use `sudo make install`.  
 Instead of `sudo make isntall`, you use `sudo checkinstall`.  
-If you dont install `checkinstall`,  
+If you have not installed `checkinstall`,  
 ```bash
 sudo apt-get install checkinstall
 ```
 
-## preparation
+## Preparation
 
 ```bash
 sudo apt-get install python-pip
 sudo pip install virtualenv
 curl -fsSkL https://raw.github.com/cask/cask/master/go | python
-
 ```
 
 ## How to use
