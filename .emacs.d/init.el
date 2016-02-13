@@ -58,6 +58,9 @@
 ;;; 古いバックアップファイルの削除
 (setq delete-old-versions t)
 
+;; 何かの依存でauto-completeがはいっているっぽいので無効化
+;;(auto-complete-mode -1)
+
 ;; font
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
@@ -336,9 +339,9 @@
                         (setq indent-level 4)
                         (setq python-indent 4)
                         (setq tab-width 4)))
-(add-hook 'python-mode-hook
-                 '(lambda ()
-                   (setq-local completion-at-point-functions nil)))
+;; (add-hook 'python-mode-hook
+;;                  '(lambda ()
+;;                    (setq-local completion-at-point-functions nil)))
 
 ;; for arduino-mode
 (require 'arduino-mode)
