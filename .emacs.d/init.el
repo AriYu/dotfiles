@@ -252,13 +252,10 @@
 
 ;; yasnippet
 (require 'yasnippet)
-;; (setq yas-snippet-dirs
-;;       '("~/.emacs.d/yasnippet-snippets"
-;;         ))
-;; (yas-load-directory (concat (cask-dependency-path cask-bundle 'yasnippet)
-;;                             "/snippets"))
-;; (cask-dependency-path cask-bundle 'yasnippet)
-(eval-after-load "yasnippet"
+(setq yas-snippet-dirs
+      (append yas-snippet-dirs
+	      '("~/.emacs.d/snippets")))
+(eval-after-load "yasnippet"		
   '(progn
      ;; companyと競合するのでyasnippetのフィールド移動は "C-i" のみにする
      (define-key yas-keymap (kbd "<tab>") nil)
@@ -345,14 +342,6 @@
 
 ;; for arduino-mode
 (require 'arduino-mode)
-;; (require 'company-arduino)
-;; (add-hook 'irony-mode-hook 'company-arduino-turn-on)
-;; (defun my-company-c-headers-get-system-path ()
-;;   "Return the system include path for the current buffer."
-;;   (let ((default '("/usr/include/" "/usr/local/include/")))
-;;     (company-arduino-append-include-dirs default t)))
-;; (setq company-c-headers-path-system 'my-company-c-headers-get-system-path)
-
 ;; Activate irony-mode on arudino-mode
 (add-hook 'arduino-mode-hook 'irony-mode)
 
@@ -360,11 +349,9 @@
 ;; https://github.com/syl20bnr/spacemacs/pull/179
 (defvar company-mode/enable-yas t
   "Enable yasnippet for all backends.")
-
 (defun company-mode/backend-with-yas (backend)
   (if (or (not company-mode/enable-yas) (and (listp backend) (member 'company-yasnippet backend)))
       backend
     (append (if (consp backend) backend (list backend))
             '(:with company-yasnippet))))
-
 (setq company-backends (mapcar #'company-mode/backend-with-yas company-backends))
