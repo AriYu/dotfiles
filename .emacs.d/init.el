@@ -339,7 +339,9 @@
                         (setq indent-level 4)
                         (setq python-indent 4)
                         (setq tab-width 4)))
-
+(add-hook 'python-mode-hook
+                 '(lambda ()
+                   (setq-local completion-at-point-functions nil)))
 
 ;; for arduino-mode
 (require 'arduino-mode)
