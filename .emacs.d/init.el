@@ -66,6 +66,14 @@
  ;; If there is more than one, they won't work right.
  '(default ((t (:family "Ricty for Powerline" :foundry "unknown" :slant normal :weight normal :height 128 :width normal)))))
 
+;; ido
+(ido-mode t)
+(ido-everywhere 1)
+(require 'ido-ubiquitous)
+(ido-ubiquitous-mode 1)
+(global-set-key (kbd "M-x") 'smex)
+(global-set-key (kbd "M-X") 'smex-major-mode-commands)
+
 ;; smooth-scroll
 (require 'smooth-scroll)
 (smooth-scroll-mode t)
@@ -321,13 +329,7 @@
                         (setq python-indent 4)
                         (setq tab-width 4)))
 
-;; helm
-(require 'helm-config)
-(helm-mode 1)
-(define-key global-map (kbd "C-x C-f") 'helm-find-files)
-(define-key global-map (kbd "M-x")     'helm-M-x)
-(define-key helm-find-files-map (kbd "TAB") 'helm-execute-persistent-action)
-(define-key helm-read-file-map (kbd "<tab>") 'helm-execute-persistent-action)
+
 
 ;; for arduino-mode
 (require 'arduino-mode)
