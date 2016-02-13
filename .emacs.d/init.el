@@ -330,7 +330,6 @@
                         (setq tab-width 4)))
 
 
-
 ;; for arduino-mode
 (require 'arduino-mode)
 ;; (require 'company-arduino)

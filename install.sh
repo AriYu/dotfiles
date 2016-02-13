@@ -27,15 +27,5 @@ else
     die "curl or wget required"
 fi
 
-cd ~/.dotfiles
-if [ $? -ne 0 ]; then
-    die "not found: $DOTPATH"
-fi
+./deploy.sh 
 
-# 移動できたらリンクを実行する
-for f in .??*
-do
-    [ "$f" = ".git" ] && continue
-
-    ln -snfv "$DOTPATH/$f" "$HOME/$f"
-done
