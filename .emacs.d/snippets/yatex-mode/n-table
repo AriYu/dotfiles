@@ -1,0 +1,50 @@
+# -*- mode: snippet -*-
+# name: an (n,m)-table
+# key: table
+# type: command
+# --
+
+(insert "\\begin{table}\n")
+(let ((colum (read-number "Table colum?" 3))
+      (row (read-number "Table row?" 3))
+      (snippet-text ""))
+  (defvar count 0)
+  (setq count 0)
+  (setq snippet-text (format "%s\t\\centering\n" snippet-text))
+  (setq snippet-text (format "%s\t\\begin{tabular}{" snippet-text))
+  (dotimes (i colum)
+    (setq snippet-text (format "%s|c%s"
+			       snippet-text
+			       (if (= i (1- colum))
+				   "|}\n"
+				 ""))))
+  (setq snippet-text (format "%s\t\t\\hline\n\t\t" snippet-text))
+  (dotimes (i colum)
+    (setq count (1+ count))
+    (setq snippet-text (format "%s ${%d:name%d%d} %s"
+			       snippet-text
+			       count
+			       0
+			       i
+			       (if (= i (1- colum))
+				   "\\\\\\"
+				 "&"))))
+  (setq snippet-text (format "%s\n\t\t\\hline\n" snippet-text))
+  (dotimes (i row)
+    (setq snippet-text (format "%s\t\t" snippet-text))
+    (dotimes (j colum)
+      (setq count (1+ count))
+      (setq snippet-text (format "%s ${%d:m%d%d} %s"
+                                 snippet-text
+                                 count
+                                 (1+ i)
+                                 (1+ j)
+                                 (if (= j (1- colum))
+				     "\\\\\\"
+                                   "&"))))
+      (setq snippet-text (format "%s\n" snippet-text)))
+  (setq snippet-text (format "%s\t\t\\hline\n\t\\end{tabular}\n" snippet-text))
+  (setq count (1+ count))
+  (setq snippet-text (format "%s\t\\caption{${%d: caption}}\n" snippet-text count))
+  (setq snippet-text (format "%s\\end{table}\n" snippet-text))
+  (yas/expand-snippet snippet-text))
