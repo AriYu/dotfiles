@@ -97,11 +97,11 @@
 (setq tex-command "latexmk -f") ;; 強制コンパイル
 (setq dvi2-command "evince")
 (add-hook 'yatex-mode-hook
-      #'(lambda ()
-          (define-key YaTeX-mode-map (kbd "C-c c") 'compile) ;;C-c c でmake できるようにする
-          (auto-complete-mode t)
-	  (setq compile-command "latexmk -f") 
-          ))
+	  '(lambda ()
+	     (define-key YaTeX-mode-map (kbd "C-c c") 'compile) ;;C-c c でmake できるようにする
+	     (auto-complete-mode t)
+	     (setq compile-command "latexmk -f") 
+	     ))
 ;;; inverse search
 (require 'dbus)
 (defun un-urlify (fname-or-url)
