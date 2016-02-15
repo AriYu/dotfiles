@@ -264,20 +264,47 @@
      (define-key yas-keymap (kbd "<tab>") nil)
      (yas-global-mode 1)))
 
-;; company-mode 補完
-(when (locate-library "company")
-  (global-company-mode 1) ; 全バッファで有効にする
-  (setq company-idle-delay 0) ; デフォルトは0.5
-  (setq company-minimum-prefix-length 1) ; デフォルトは4
-  (setq company-selection-wrap-around t) ; 候補の一番下でさらに下に行こうとすると一番上に戻る
-  (global-set-key (kbd "C-M-i") 'company-complete)
-  ;; (setq company-idle-delay nil) ; 自動補完をしない
-  (define-key company-active-map (kbd "C-n") 'company-select-next)
-  (define-key company-active-map (kbd "C-p") 'company-select-previous)
-  (define-key company-search-map (kbd "C-n") 'company-select-next)
-  (define-key company-search-map (kbd "C-p") 'company-select-previous)
-  ;; (define-key company-active-map (kbd "<tab>") 'company-complete-selection)
-  )
+
+;; =============
+;; irony-mode
+;; =============
+(require 'irony)
+(add-hook 'c++-mode-hook 'irony-mode)
+(add-hook 'c-mode-hook 'irony-mode)
+;; =============
+;; company mode
+;; =============
+(require 'company)
+(add-hook 'c++-mode-hook 'company-mode)
+(add-hook 'c-mode-hook 'company-mode)
+(setq company-idle-delay 0) ; デフォルトは0.5
+(setq company-minimum-prefix-length 1) ; デフォルトは4
+(setq company-selection-wrap-around t) ; 候補の一番下でさらに下に行こうとすると一番上に戻る
+;; replace the `completion-at-point' and `complete-symbol' bindings in
+;; irony-mode's buffers by irony-mode's function
+(defun my-irony-mode-hook ()
+(define-key irony-mode-map [remap completion-at-point]
+  'irony-completion-at-point-async)
+(define-key irony-mode-map [remap complete-symbol]
+  'irony-completion-at-point-async))
+(add-hook 'irony-mode-hook 'my-irony-mode-hook)
+(add-hook 'irony-mode-hook 'irony-cdb-autosetup-compile-options)
+(eval-after-load 'company
+'(add-to-list 'company-backends 'company-irony))
+;; (optional) adds CC special commands to `company-begin-commands' in order to
+;; trigger completion at interesting places, such as after scope operator
+;;     std::|
+(add-hook 'irony-mode-hook 'company-irony-setup-begin-commands)
+;; =============
+;; eldoc-mode
+;; =============
+(add-hook 'irony-mode-hook 'irony-eldoc)
+
+(define-key company-active-map (kbd "C-n") 'company-select-next)
+(define-key company-active-map (kbd "C-p") 'company-select-previous)
+(define-key company-search-map (kbd "C-n") 'company-select-next)
+(define-key company-search-map (kbd "C-p") 'company-select-previous)
+
 (defun company--insert-candidate2 (candidate)
   (when (> (length candidate) 0)
     (setq candidate (substring-no-properties candidate))
@@ -297,16 +324,7 @@
       (company--insert-candidate2 company-common))))
 
 (define-key company-active-map [tab] 'company-complete-common2)
-;; (define-key company-active-map [backtab] 'company-select-previous) 
 
-;; for c++ 
-(require 'irony)
-(eval-after-load "irony"
-  '(progn
-     (custom-set-variables '(irony-additional-clang-options '("-std=c++11")))
-     (add-to-list 'company-backends 'company-irony)
-     (add-hook 'irony-mode-hook 'irony-cdb-autosetup-compile-options)
-     (add-hook 'c-mode-common-hook 'irony-mode)))
 ;;; C++ style
 ;; (load-file "~/.emacs.d/elpa/google-c-style-20140929.1118/google-c-style.el")
 ;; (require 'google-c-style)
@@ -324,6 +342,7 @@
                         (setq indent-level 4)
                         (setq python-indent 4)
                         (setq tab-width 4)))
+
 ;; (add-hook 'python-mode-hook
 ;;                  '(lambda ()
 ;;                    (setq-local completion-at-point-functions nil)))
@@ -333,17 +352,18 @@
 ;; Activate irony-mode on arudino-mode
 (add-hook 'arduino-mode-hook 'irony-mode)
 
-;; Add yasnippet support for all company backends
-;; https://github.com/syl20bnr/spacemacs/pull/179
+;; ;; Add yasnippet support for all company backends
+;; ;; https://github.com/syl20bnr/spacemacs/pull/179
 (defvar company-mode/enable-yas t
   "Enable yasnippet for all backends.")
 (defun company-mode/backend-with-yas (backend)
   (if (or (not company-mode/enable-yas) (and (listp backend) (member 'company-yasnippet backend)))
       backend
     (append (if (consp backend) backend (list backend))
-            '(:with company-yasnippet))))
+	    '(:with company-yasnippet))))
 (setq company-backends (mapcar #'company-mode/backend-with-yas company-backends))
 
+;; Markdwon mode
 (autoload 'markdown-mode "markdown-mode"
   "Major mode for editing Markdown files" t)
 (add-to-list 'auto-mode-alist '("\\.text\\'" . markdown-mode))
