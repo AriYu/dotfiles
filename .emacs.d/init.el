@@ -13,6 +13,9 @@
 (require 'linum)
 (global-linum-mode)
 
+;; ツールバーを非表示
+(tool-bar-mode 0)
+
 ;; スクロール時のカーソル位置の維持
 (setq scroll-preserve-screen-position t)
 
