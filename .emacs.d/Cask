@@ -4,6 +4,7 @@
 (depends-on "arduino-mode")
 (depends-on "bind-key")
 (depends-on "cask")
+(depends-on "cmake-mode")
 (depends-on "company")
 (depends-on "company-irony")
 (depends-on "company-jedi")
