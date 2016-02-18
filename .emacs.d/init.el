@@ -377,3 +377,12 @@
 	   '(("CMakeLists\\.txt\\'" . cmake-mode))
 	   '(("\\.cmake\\'" . cmake-mode))
 	   auto-mode-alist))
+
+;; for environment
+(when (memq window-system '(mac ns))
+  (exec-path-from-shell-initialize))
+
+;; for winner mode
+(winner-mode 1)
+(global-set-key (kbd "C-z") 'winner-undo)
+(global-set-key (kbd "C-M-z") 'winner-redo)
