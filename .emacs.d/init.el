@@ -384,5 +384,5 @@
 
 ;; for winner mode
 (winner-mode 1)
-(global-set-key (kbd "C-z") 'winner-undo)
-(global-set-key (kbd "C-M-z") 'winner-redo)
+(global-set-key (kbd "C-M-z") 'winner-undo)
+;;(global-set-key (kbd "C-M-z") 'winner-redo)
