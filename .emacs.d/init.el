@@ -266,39 +266,18 @@
 
 
 ;; =============
-;; irony-mode
-;; =============
-(require 'irony)
-(add-hook 'c++-mode-hook 'irony-mode)
-(add-hook 'c-mode-hook 'irony-mode)
-;; =============
 ;; company mode
 ;; =============
 (require 'company)
-(add-hook 'c++-mode-hook 'company-mode)
-(add-hook 'c-mode-hook 'company-mode)
+(add-hook 'after-init-hook 'global-company-mode)
+(setq company-dabbrev-downcase nil)
+;; (add-hook 'c++-mode-hook 'company-mode)
+;; (add-hook 'c-mode-hook 'company-mode)
+;; (add-hook 'python-mode-hook 'company-mode)
+;; (add-hook 'cmake-mode-hook 'company-mode)
 (setq company-idle-delay 0) ; デフォルトは0.5
 (setq company-minimum-prefix-length 1) ; デフォルトは4
 (setq company-selection-wrap-around t) ; 候補の一番下でさらに下に行こうとすると一番上に戻る
-;; replace the `completion-at-point' and `complete-symbol' bindings in
-;; irony-mode's buffers by irony-mode's function
-(defun my-irony-mode-hook ()
-(define-key irony-mode-map [remap completion-at-point]
-  'irony-completion-at-point-async)
-(define-key irony-mode-map [remap complete-symbol]
-  'irony-completion-at-point-async))
-(add-hook 'irony-mode-hook 'my-irony-mode-hook)
-(add-hook 'irony-mode-hook 'irony-cdb-autosetup-compile-options)
-(eval-after-load 'company
-'(add-to-list 'company-backends 'company-irony))
-;; (optional) adds CC special commands to `company-begin-commands' in order to
-;; trigger completion at interesting places, such as after scope operator
-;;     std::|
-(add-hook 'irony-mode-hook 'company-irony-setup-begin-commands)
-;; =============
-;; eldoc-mode
-;; =============
-(add-hook 'irony-mode-hook 'irony-eldoc)
 
 (define-key company-active-map (kbd "C-n") 'company-select-next)
 (define-key company-active-map (kbd "C-p") 'company-select-previous)
@@ -325,33 +304,6 @@
 
 (define-key company-active-map [tab] 'company-complete-common2)
 
-;;; C++ style
-;; (load-file "~/.emacs.d/elpa/google-c-style-20140929.1118/google-c-style.el")
-;; (require 'google-c-style)
-;; (add-hook 'c-mode-common-hook 'google-set-c-style)
-
-;; python
-(require 'jedi-core)
-(setq jedi:complete-on-dot t)
-(setq jedi:use-shortcuts t)
-(add-hook 'python-mode-hook 'jedi:setup)
-(add-to-list 'company-backends 'company-jedi) ; backendに追加
-(add-hook 'python-mode-hook
-                   '(lambda ()
-                        (setq indent-tabs-mode nil)
-                        (setq indent-level 4)
-                        (setq python-indent 4)
-                        (setq tab-width 4)))
-
-;; (add-hook 'python-mode-hook
-;;                  '(lambda ()
-;;                    (setq-local completion-at-point-functions nil)))
-
-;; for arduino-mode
-(require 'arduino-mode)
-;; Activate irony-mode on arudino-mode
-(add-hook 'arduino-mode-hook 'irony-mode)
-
 ;; ;; Add yasnippet support for all company backends
 ;; ;; https://github.com/syl20bnr/spacemacs/pull/179
 (defvar company-mode/enable-yas t
@@ -363,14 +315,74 @@
 	    '(:with company-yasnippet))))
 (setq company-backends (mapcar #'company-mode/backend-with-yas company-backends))
 
+
+;; =============
+;; irony-mode
+;; =============
+(require 'irony)
+(add-hook 'c++-mode-hook 'irony-mode)
+(add-hook 'c-mode-hook 'irony-mode)
+
+;; replace the `completion-at-point' and `complete-symbol' bindings in
+;; irony-mode's buffers by irony-mode's function
+(defun my-irony-mode-hook ()
+(define-key irony-mode-map [remap completion-at-point]
+  'irony-completion-at-point-async)
+(define-key irony-mode-map [remap complete-symbol]
+  'irony-completion-at-point-async))
+(add-hook 'irony-mode-hook 'my-irony-mode-hook)
+(add-hook 'irony-mode-hook 'irony-cdb-autosetup-compile-options)
+(add-hook 'irony-mode-hook
+	  (lambda ()
+	    (add-to-list 'company-backends '(company-irony company-dabbrev company-yasnippet))))
+;; (eval-after-load 'company
+;; '(add-to-list 'company-backends 'company-irony))
+;; (optional) adds CC special commands to `company-begin-commands' in order to
+;; trigger completion at interesting places, such as after scope operator
+;;     std::|
+(add-hook 'irony-mode-hook 'company-irony-setup-begin-commands)
+;; =============
+;; eldoc-mode
+;; =============
+(add-hook 'irony-mode-hook 'irony-eldoc)
+
+;; =============
+;; python-mode
+;; =============
+(require 'jedi-core)
+(setq jedi:complete-on-dot t)
+(setq jedi:use-shortcuts t)
+(add-hook 'python-mode-hook 'jedi:setup)
+(add-hook 'python-mode-hook
+                   '(lambda ()
+                        (setq indent-tabs-mode nil)
+                        (setq indent-level 4)
+                        (setq python-indent 4)
+                        (setq tab-width 4)))
+(add-hook 'python-mode-hook
+	  (lambda ()
+	    (add-to-list 'company-backends '(company-jedi company-dabbrev company-yasnippet))))
+
+;; ==============
+;; arduino-mode
+;; ==============
+(require 'arduino-mode)
+;; Activate irony-mode on arudino-mode
+(add-hook 'arduino-mode-hook 'irony-mode)
+
+
+;; ===============
 ;; Markdwon mode
+;; ===============
 (autoload 'markdown-mode "markdown-mode"
   "Major mode for editing Markdown files" t)
 (add-to-list 'auto-mode-alist '("\\.text\\'" . markdown-mode))
 (add-to-list 'auto-mode-alist '("\\.markdown\\'" . markdown-mode))
 (add-to-list 'auto-mode-alist '("\\.md\\'" . markdown-mode))
 
+;; =============
 ;; cmake mode
+;; =============
 (require 'cmake-mode); Add cmake listfile names to the mode list.
 (setq auto-mode-alist
 	  (append
@@ -378,11 +390,15 @@
 	   '(("\\.cmake\\'" . cmake-mode))
 	   auto-mode-alist))
 
-;; for environment
+;; ==========================
+;; for environment like path
+;; ==========================
 (when (memq window-system '(mac ns))
   (exec-path-from-shell-initialize))
 
-;; for winner mode
+;; =============
+;; winner mode
+;; =============
 (winner-mode 1)
 (global-set-key (kbd "C-M-z") 'winner-undo)
 ;;(global-set-key (kbd "C-M-z") 'winner-redo)
