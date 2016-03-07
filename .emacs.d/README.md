@@ -12,8 +12,16 @@ http://ubuntuhandbook.org/index.php/2014/10/emacs-24-4-released-install-in-ubunt
 And, finally, you do not use `sudo make install`.  
 Instead of `sudo make isntall`, you use `sudo checkinstall`.  
 If you have not installed `checkinstall`,  
+
 ```bash
 sudo apt-get install checkinstall
+```
+
+## Dependencies
+For markdown-preview-mode
+
+```
+sudo apt-get install markdown
 ```
 
 ## Preparation
@@ -29,7 +37,9 @@ curl -fsSkL https://raw.github.com/cask/cask/master/go | python
 cd ~/.emacs.d
 EMACS="emacs-24.4" cask install
 ```
+
 run emacs,
+
 ```
 M-x jedi:install-server
 M-x irony-server-install
@@ -46,6 +56,7 @@ sudo pip install --upgrade pip
 ```
 sudo apt-get remove emacs23
 ```
+
 then, you shuld install emacs24.4 or higher
 
 ### Permission denied
