@@ -67,7 +67,8 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(default ((t (:family "Ricty for Powerline" :foundry "unknown" :slant normal :weight normal :height 128 :width normal)))))
+ '(default ((t (:family "Ricty for Powerline" :foundry "unknown" :slant normal :weight normal :height 128 :width normal))))
+ '(whitespace-tab ((t (:foreground "dark gray" :underline t :weight bold)))))
 
 
 ;; ido
@@ -155,7 +156,7 @@
           '(lambda ()
              (let ((start-marker (make-marker))
                    (end-marker (process-mark 
-								(get-buffer-process (current-buffer)))))
+				(get-buffer-process (current-buffer)))))
                (set-marker start-marker (point-min))
                (ansi-color-apply-on-region start-marker end-marker))))
 
@@ -231,12 +232,12 @@
 '(("php"    . "\\.phtml\\'")
   ("blade"  . "\\.blade\\.")))
 (setq web-mode-enable-current-element-highlight t)
-(defun my-web-mode-hook () "Hooks for Web mode." 
-  (setq web-mode-markup-indent-offset 2) 
+(defun my-web-mode-hook () "Hooks for Web mode."
+  (setq web-mode-markup-indent-offset 2)
   (setq web-mode-markup-indent-offset 2)
   (setq web-mode-css-indent-offset 2)
   (setq web-mode-code-indent-offset 2)
-  ) 
+  )
 (add-hook 'web-mode-hook 'my-web-mode-hook)
 
 ;; magit
@@ -258,7 +259,7 @@
 (setq yas-snippet-dirs
       (append yas-snippet-dirs
 	      '("~/.emacs.d/snippets")))
-(eval-after-load "yasnippet"		
+(eval-after-load "yasnippet"
   '(progn
      ;; companyと競合するのでyasnippetのフィールド移動は "C-i" のみにする
      (define-key yas-keymap (kbd "<tab>") nil)
@@ -402,3 +403,60 @@
 (winner-mode 1)
 (global-set-key (kbd "C-M-z") 'winner-undo)
 ;;(global-set-key (kbd "C-M-z") 'winner-redo)
+
+
+;; (custom-set-variables
+;;  ;; custom-set-variables was added by Custom.
+;;  ;; If you edit it by hand, you could mess it up, so be careful.
+;;  ;; Your init file should contain only one such instance.
+;;  ;; If there is more than one, they won't work right.
+;;  '(markdown-preview-style
+;;    "file://${HOME}/Desktop/markdown-styles/layouts/mixu-gray/assets/style.css"))
+
+;; =============
+;; mmm-mode
+;; http://jblevins.org/log/mmm
+;; =============
+(require 'mmm-mode)
+(setq mmm-global-mode 'maybe)
+(defun my-mmm-markdown-auto-class (lang &optional submode)
+  "Define a mmm-mode class for LANG in `markdown-mode' using SUBMODE.
+If SUBMODE is not provided, use `LANG-mode' by default."
+  (let ((class (intern (concat "markdown-" lang)))
+        (submode (or submode (intern (concat lang "-mode"))))
+        (front (concat "^```" lang "[\n\r]+"))
+        (back "^```"))
+    (mmm-add-classes (list (list class :submode submode :front front :back back)))
+    (mmm-add-mode-ext-class 'markdown-mode nil class)))
+
+;; Mode names that derive directly from the language name
+(mapc 'my-mmm-markdown-auto-class
+      '("awk" "bibtex" "c" "cpp" "css" "html" "latex" "lisp" "makefile"
+        "markdown" "python" "r" "ruby" "sql" "stata" "xml"))
+(my-mmm-markdown-auto-class "shell" 'shell-script-mode)
+
+(setq mmm-parse-when-idle 't)
+
+;; =============
+;; whitespace-mode
+;; http://keisanbutsuriya.hateblo.jp/entry/2015/02/03/153149
+;; =============
+(require 'whitespace)
+(setq whitespace-style '(face           ; faceで可視化
+                         trailing       ; 行末
+                         tabs           ; タブ
+                         empty          ; 先頭/末尾の空行
+                         space-mark     ; 表示のマッピング
+                         tab-mark
+                         ))
+
+(setq whitespace-display-mappings
+      '((tab-mark ?\t [?\u00BB ?\t] [?\\ ?\t])))
+
+(global-whitespace-mode 1)
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
