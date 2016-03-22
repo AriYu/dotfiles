@@ -194,6 +194,7 @@
 ;;; color-theme
 (load-theme 'monokai t)
 
+
 ;; 画面の下の方を綺麗にする
 (require 'powerline)
 (powerline-default-theme)
@@ -454,9 +455,3 @@ If SUBMODE is not provided, use `LANG-mode' by default."
       '((tab-mark ?\t [?\u00BB ?\t] [?\\ ?\t])))
 
 (global-whitespace-mode 1)
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- )
