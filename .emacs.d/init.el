@@ -61,6 +61,10 @@
 ;;; 古いバックアップファイルの削除
 (setq delete-old-versions t)
 
+;; リージョンに上書き
+(delete-selection-mode t)
+
+
 ;; font
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
@@ -193,7 +197,8 @@
 
 ;;; color-theme
 (load-theme 'monokai t)
-
+;; (set-frame-parameter nil 'background-mode 'dark)
+;; (load-theme 'solarized t)
 
 ;; 画面の下の方を綺麗にする
 (require 'powerline)
@@ -455,3 +460,7 @@ If SUBMODE is not provided, use `LANG-mode' by default."
       '((tab-mark ?\t [?\u00BB ?\t] [?\\ ?\t])))
 
 (global-whitespace-mode 1)
+
+;; カーソルの設定
+(setq-default cursor-type '(bar . 3))
+(set-cursor-color "turquoise")
