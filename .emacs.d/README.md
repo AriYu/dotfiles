@@ -42,7 +42,7 @@ run emacs,
 
 ```
 M-x jedi:install-server
-M-x irony-server-install
+M-x irony-install-server
 ```
 
 ## If you get error
