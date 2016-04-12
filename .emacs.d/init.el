@@ -383,10 +383,11 @@
 ;; ===============
 (autoload 'markdown-mode "markdown-mode"
   "Major mode for editing Markdown files" t)
-(add-to-list 'auto-mode-alist '("\\.text\\'" . markdown-mode))
-(add-to-list 'auto-mode-alist '("\\.markdown\\'" . markdown-mode))
-(add-to-list 'auto-mode-alist '("\\.md\\'" . markdown-mode))
-
+(add-to-list 'auto-mode-alist '("\\.text\\'" . gfm-mode))
+(add-to-list 'auto-mode-alist '("\\.markdown\\'" . gfm-mode))
+(add-to-list 'auto-mode-alist '("\\.md\\'" . gfm-mode))
+(setq markdown-open-command "mark")
+(setq markdown-preview-style "http://thomasf.github.io/solarized-css/solarized-light.min.css")
 ;; =============
 ;; cmake mode
 ;; =============
@@ -409,15 +410,6 @@
 (winner-mode 1)
 (global-set-key (kbd "C-M-z") 'winner-undo)
 ;;(global-set-key (kbd "C-M-z") 'winner-redo)
-
-
-;; (custom-set-variables
-;;  ;; custom-set-variables was added by Custom.
-;;  ;; If you edit it by hand, you could mess it up, so be careful.
-;;  ;; Your init file should contain only one such instance.
-;;  ;; If there is more than one, they won't work right.
-;;  '(markdown-preview-style
-;;    "file://${HOME}/Desktop/markdown-styles/layouts/mixu-gray/assets/style.css"))
 
 ;; =============
 ;; mmm-mode
@@ -464,3 +456,12 @@ If SUBMODE is not provided, use `LANG-mode' by default."
 ;; カーソルの設定
 (setq-default cursor-type '(bar . 3))
 (set-cursor-color "turquoise")
+
+;;-------------------------
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(markdown-preview-style
+   "file://${HOME}/.emacs.d/github-markdown-css/github-markdown.css"))
