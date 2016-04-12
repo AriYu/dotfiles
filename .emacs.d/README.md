@@ -28,6 +28,7 @@ sudo apt-get install markdown
 
 ```bash
 sudo apt-get install python-pip
+sudo apt-get install llvm-dev clang libclang-dev cmake
 sudo pip install virtualenv
 curl -fsSkL https://raw.github.com/cask/cask/master/go | python
 ```
