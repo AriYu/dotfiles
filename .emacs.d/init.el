@@ -110,6 +110,8 @@
 	     (auto-complete-mode t)
 	     (setq compile-command "latexmk -f") 
 	     ))
+;; .latexmkrcファイルをperlモードで開く
+(add-to-list 'auto-mode-alist '("/\\.latexmkrc\\'" . perl-mode))
 ;;; inverse search
 (require 'dbus)
 (defun un-urlify (fname-or-url)
@@ -214,6 +216,10 @@
 ;; [DEL]キーもしくは[C-h]に当てられているdelete-backward-charにadviceをかけられて削除するたびにフリーズする．これを無効化.
 (ad-disable-advice 'delete-backward-char 'before 'sp-delete-pair-advice)
 (ad-activate 'delete-backward-char)
+
+;;対応かっこのハイライト
+(show-paren-mode 1)
+(setq show-paren-delay 0)
 
 ;; gnuplot-mode
 (require 'gnuplot-mode)
@@ -465,3 +471,21 @@ If SUBMODE is not provided, use `LANG-mode' by default."
  ;; If there is more than one, they won't work right.
  '(markdown-preview-style
    "file://${HOME}/.emacs.d/github-markdown-css/github-markdown.css"))
+
+(setq eww-search-prefix "http://www.google.co.jp/search?q=")
+(defvar eww-disable-colorize t)
+(defun shr-colorize-region--disable (orig start end fg &optional bg &rest _)
+  (unless eww-disable-colorize
+    (funcall orig start end fg)))
+(advice-add 'shr-colorize-region :around 'shr-colorize-region--disable)
+(advice-add 'eww-colorize-region :around 'shr-colorize-region--disable)
+(defun eww-disable-color ()
+  "eww で文字色を反映させない"
+  (interactive)
+  (setq-local eww-disable-colorize t)
+  (eww-reload))
+(defun eww-enable-color ()
+  "eww で文字色を反映させる"
+  (interactive)
+  (setq-local eww-disable-colorize nil)
+  (eww-reload))

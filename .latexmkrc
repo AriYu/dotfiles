@@ -1,7 +1,7 @@
-$latex = $latex='platex -kanji=utf8 -guess-input-utf8 -synctex=1 -interaction=nonstopmode %S';
-$bibtex = 'jbibtex';
+$latex = 'platex %O -kanji=utf8 -guess-input-utf8 -synctex=1 -interaction=nonstopmode %S';
+$bibtex = 'pbibtex %O %B';
 # $dvipdf = $dvipdf='dvipdfmx -d 5 -f ptex-ipaex.map %S';
-$dvipdf = $dvipdf='dvipdfmx -d 5 %S';
+$dvipdf = $dvipdf='dvipdfmx -d 5 %O %S';
 $dvips = 'pdvips';
 $dvi_previewer = 'start xdvi';
 $pdf_previewer = 'start evince';
