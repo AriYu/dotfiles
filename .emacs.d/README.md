@@ -3,6 +3,15 @@
 This .emacs.d assume you use `C++`, `Python`, `Latex`.
 And, this is managed by Cask and Pallet.
 
+## Features
+
+### Nortification
+When you run `compile`, the result will be notified.
+![notification sample](./documents/screen_shot_notification.png "Nortification sample") 
+
+### Completion
+pending...
+
 ## Require
 emacs 24.4 or later
 

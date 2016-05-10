@@ -497,10 +497,10 @@ and set the focus back to Emacs frame"
   (if (string-match "^finished" msg)
       (shell-command
        (format
-	"notify-send -i ~/.emacs.d/emacs.png \'Compilation Success!!!\'"))
+	"notify-send -i ~/.emacs.d/documents/emacs.png \'Compilation Success!!!\'"))
     (shell-command
      (format
-      "notify-send -i ~/.emacs.d/emacs.png \'Compilation Failed\'")))
+      "notify-send -i ~/.emacs.d/documents/emacs.png \'Compilation Failed\'")))
   )
 
 (add-to-list 'compilation-finish-functions
