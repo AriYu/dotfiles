@@ -6,7 +6,7 @@ And, this is managed by Cask and Pallet.
 ## Features
 
 ### Nortification
-When you run `compile`, the result will be notified.
+When you run `compile`, the result will be notified.  
 ![notification sample](./documents/screen_shot_notification.png "Nortification sample") 
 
 ### Completion
