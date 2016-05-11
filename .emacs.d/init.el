@@ -489,3 +489,19 @@ If SUBMODE is not provided, use `LANG-mode' by default."
   (interactive)
   (setq-local eww-disable-colorize nil)
   (eww-reload))
+
+(defun notify-compilation-result(buffer msg)
+  "Notify that the compilation is finished,
+close the *compilation* buffer if the compilation is successful,
+and set the focus back to Emacs frame"
+  (if (string-match "^finished" msg)
+      (shell-command
+       (format
+	"notify-send -i ~/.emacs.d/documents/emacs.png \'Compilation Success!!!\'"))
+    (shell-command
+     (format
+      "notify-send -i ~/.emacs.d/documents/emacs.png \'Compilation Failed\'")))
+  )
+
+(add-to-list 'compilation-finish-functions
+	     'notify-compilation-result)
