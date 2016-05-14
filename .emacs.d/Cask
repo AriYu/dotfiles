@@ -9,6 +9,7 @@
 (depends-on "company")
 (depends-on "company-irony")
 (depends-on "company-jedi")
+(depends-on "company-statistics")
 (depends-on "dash")
 (depends-on "drag-stuff")
 (depends-on "elscreen")
