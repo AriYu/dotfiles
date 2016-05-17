@@ -65,6 +65,10 @@
 (delete-selection-mode t)
 
 
+;; fcitx setting
+(fcitx-default-setup)
+(setq fcitx-use-dbus t)
+
 ;; font
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
@@ -107,6 +111,7 @@
 (add-hook 'yatex-mode-hook
 	  '(lambda ()
 	     (define-key YaTeX-mode-map (kbd "C-c c") 'compile) ;;C-c c でmake できるようにする
+	     (define-key YaTeX-mode-map (kbd "C-c r") 'recompile)
 	     (auto-complete-mode t)
 	     (setq compile-command "latexmk -f") 
 	     ))
