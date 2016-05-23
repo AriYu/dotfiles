@@ -515,3 +515,9 @@ and set the focus back to Emacs frame"
 
 (add-to-list 'compilation-finish-functions
 	     'notify-compilation-result)
+
+;; Org-mode
+;; ref. https://github.com/fujimisakari/.emacs.d/blob/master/inits/40-org-mode.el
+(setq org-support-shift-select 't)
+(setq org-startup-truncated nil) ; org-mode開始時は折り返しするよう設定
+(setq org-startup-with-inline-images t) ; 画像をインライン表示
