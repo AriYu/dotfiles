@@ -369,6 +369,20 @@
 ;; =============
 (add-hook 'irony-mode-hook 'irony-eldoc)
 
+;; ======================================
+;; C++ indentation style setting for ROS
+;; ======================================
+(defun ROS-c-mode-hook()
+  (setq c-basic-offset 2)
+  (setq indent-tabs-mode nil)
+  (c-set-offset 'substatement-open 0)
+  (c-set-offset 'innamespace 0)
+  (c-set-offset 'case-label '+))
+(add-hook 'c++-mode-hook 'ROS-c-mode-hook)
+
+;;; In order to get namespace indentation correct, .h files must be opened in C++ mode
+(add-to-list 'auto-mode-alist '("\\.h$" . c++-mode))
+
 ;; =============
 ;; python-mode
 ;; =============
@@ -480,7 +494,7 @@ If SUBMODE is not provided, use `LANG-mode' by default."
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(markdown-preview-style
-   "file://${HOME}/.emacs.d/github-markdown-css/github-markdown.css"))
+   "http://dakrone.github.io/org.css"))
 
 (setq eww-search-prefix "http://www.google.co.jp/search?q=")
 (defvar eww-disable-colorize t)
@@ -521,3 +535,27 @@ and set the focus back to Emacs frame"
 (setq org-support-shift-select 't)
 (setq org-startup-truncated nil) ; org-mode開始時は折り返しするよう設定
 (setq org-startup-with-inline-images t) ; 画像をインライン表示
+(unless (boundp 'org-latex-classes)
+  (setq org-latex-classes nil))
+(setq org-latex-pdf-process '("latexmk -f")) ;; pdf process = latexmk
+(setq org-latex-default-class "jsarticle") ;; default class = jsarticle
+;; Make TAB the yas trigger key in the org-mode-hook and enable flyspell mode and autofill
+(add-hook 'org-mode-hook
+          (lambda ()
+            ;; yasnippet
+            (make-variable-buffer-local 'yas/trigger-key)
+            (org-set-local 'yas/trigger-key [tab])
+            (define-key yas/keymap [tab] 'yas/next-field-group)
+            ;; flyspell mode for spell checking everywhere
+            (flyspell-mode 1)))
+;; org-latex-classes
+(add-to-list 'org-latex-classes
+             '("jsarticle"
+               "\\documentclass[11pt,a4paper,uplatex]{jsarticle}
+                [NO-DEFAULT-PACKAGES] [PACKAGES] [EXTRA]"
+               ("\\section{%s}" . "\\section*{%s}")
+               ("\\subsection{%s}" . "\\subsection*{%s}")
+               ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
+               ("\\paragraph{%s}" . "\\paragraph*{%s}")
+               ("\\subparagraph{%s}" . "\\subparagraph*{%s}")
+               ))
