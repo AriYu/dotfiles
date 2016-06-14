@@ -1,6 +1,7 @@
 (source gnu)
 (source melpa)
 
+(depends-on "airline-themes")
 (depends-on "arduino-mode")
 (depends-on "bind-key")
 (depends-on "cask")
@@ -48,4 +49,5 @@
 (depends-on "yaml-mode")
 (depends-on "yasnippet")
 (depends-on "yatex")
+(depends-on "zenburn-theme")
 (depends-on "zlc")
