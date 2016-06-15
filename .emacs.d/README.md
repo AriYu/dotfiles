@@ -26,6 +26,8 @@ If you have not installed `checkinstall`,
 sudo apt-get install checkinstall
 ```
 
+I use `Source Hans code jp` font. So, please install it.  
+
 ## Dependencies
 For markdown-preview-mode
 
