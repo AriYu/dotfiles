@@ -75,7 +75,7 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(default ((t (:family "Ricty for Powerline" :foundry "unknown" :slant normal :weight normal :height 128 :width normal))))
+ '(default ((t (:family "Source Han Code JP Regular" :foundry "unknown" :slant normal :weight normal :height 110 :width normal))))
  '(whitespace-tab ((t (:foreground "dark gray" :underline t :weight bold)))))
 
 
@@ -204,16 +204,23 @@
 
 ;;; color-theme
 (load-theme 'monokai t)
-;; (set-frame-parameter nil 'background-mode 'dark)
-;; (load-theme 'solarized t)
-
-;; 画面の下の方を綺麗にする
+;;(set-frame-parameter nil 'background-mode 'dark)
+;;(load-theme 'solarized t)
+;;(add-to-list 'custom-theme-load-path "~/.emacs.d/theme/")
+;;(load-theme 'molokai t)
+;; powerline theme
 (require 'powerline)
 (powerline-default-theme)
-(set-face-attribute 'mode-line nil
-                    :foreground "White"
-                    :background "DarkCyan"
-                    :box nil)
+(require 'airline-themes)
+(load-theme 'airline-powerlineish t)
+
+;; 画面の下の方を綺麗にする
+;; (require 'powerline)
+;; (powerline-default-theme)
+;; (set-face-attribute 'mode-line nil
+;;                     :foreground "White"
+;;                     :background "DarkCyan"
+;;                     :box nil)
 
 
 ;; smartparent
@@ -288,12 +295,16 @@
 ;; =============
 (require 'company)
 (add-hook 'after-init-hook 'global-company-mode)
-(setq company-dabbrev-downcase nil)
-(setq company-dabbrev-ignore-case nil)
-;; (add-hook 'c++-mode-hook 'company-mode)
-;; (add-hook 'c-mode-hook 'company-mode)
-;; (add-hook 'python-mode-hook 'company-mode)
-;; (add-hook 'cmake-mode-hook 'company-mode)
+;; set default `company-backends'
+(setq company-backends
+      '((company-files          ; files & directory
+         company-keywords       ; keywords
+         company-capf
+         company-yasnippet
+	 company-dabbrev-code
+         )))
+(setq company-dabbrev-code-mode t)
+(setq company-dabbrev-code-everywhere t)
 (setq company-idle-delay 0) ; デフォルトは0.5
 (setq company-minimum-prefix-length 1) ; デフォルトは4
 (setq company-selection-wrap-around t) ; 候補の一番下でさらに下に行こうとすると一番上に戻る
@@ -302,29 +313,7 @@
 (define-key company-active-map (kbd "C-p") 'company-select-previous)
 (define-key company-search-map (kbd "C-n") 'company-select-next)
 (define-key company-search-map (kbd "C-p") 'company-select-previous)
-
-;; (defun company--insert-candidate2 (candidate)
-;;   (when (> (length candidate) 0)
-;;     (setq candidate (substring-no-properties candidate))
-;;     (if (eq (company-call-backend 'ignore-case) 'keep-prefix)
-;;         (insert (company-strip-prefix candidate))
-;;       (if (equal company-prefix candidate)
-;;           (company-select-next)
-;;           (delete-region (- (point) (length company-prefix)) (point))
-;;         (insert candidate))
-;;       )))
-;; (defun company-complete-common2 ()
-;;   (interactive)
-;;   (when (company-manual-begin)
-;;     (if (and (not (cdr company-candidates))
-;;              (equal company-common (car company-candidates)))
-;;         (company-complete-selection)
-;;       (company--insert-candidate2 company-common))))
-
-;; (define-key company-active-map [tab] 'company-complete-common2)
-
 (define-key company-active-map (kbd "<tab>") 'company-complete-common-or-cycle)
-
 (add-hook 'after-init-hook 'company-statistics-mode)
 
 ;; ;; Add yasnippet support for all company backends
@@ -345,25 +334,13 @@
 (require 'irony)
 (add-hook 'c++-mode-hook 'irony-mode)
 (add-hook 'c-mode-hook 'irony-mode)
+(add-hook 'arduino-mode-hook 'irony-mode)
 
-;; replace the `completion-at-point' and `complete-symbol' bindings in
-;; irony-mode's buffers by irony-mode's function
-(defun my-irony-mode-hook ()
-(define-key irony-mode-map [remap completion-at-point]
-  'irony-completion-at-point-async)
-(define-key irony-mode-map [remap complete-symbol]
-  'irony-completion-at-point-async))
-(add-hook 'irony-mode-hook 'my-irony-mode-hook)
-(add-hook 'irony-mode-hook 'irony-cdb-autosetup-compile-options)
 (add-hook 'irony-mode-hook
-	  (lambda ()
-	    (add-to-list 'company-backends '(company-irony company-dabbrev company-yasnippet))))
-;; (eval-after-load 'company
-;; '(add-to-list 'company-backends 'company-irony))
-;; (optional) adds CC special commands to `company-begin-commands' in order to
-;; trigger completion at interesting places, such as after scope operator
-;;     std::|
-(add-hook 'irony-mode-hook 'company-irony-setup-begin-commands)
+	  ((lambda ()
+	     (add-to-list (make-local-variable 'company-backends)
+			  'company-irony))))
+
 ;; =============
 ;; eldoc-mode
 ;; =============
@@ -398,15 +375,8 @@
                         (setq tab-width 4)))
 (add-hook 'python-mode-hook
 	  (lambda ()
-	    (add-to-list 'company-backends '(company-jedi company-dabbrev company-yasnippet))))
-
-;; ==============
-;; arduino-mode
-;; ==============
-(require 'arduino-mode)
-;; Activate irony-mode on arudino-mode
-(add-hook 'arduino-mode-hook 'irony-mode)
-
+	    (add-to-list (make-local-variable 'company-backends)
+			 'company-jedi)))
 
 ;; ===============
 ;; Markdwon mode
@@ -418,15 +388,18 @@
 (add-to-list 'auto-mode-alist '("\\.md\\'" . markdown-mode))
 (setq markdown-open-command "mark")
 (setq markdown-preview-style "http://thomasf.github.io/solarized-css/solarized-light.min.css")
+(add-hook 'markdown-mode-hook
+          '(lambda ()
+             (set (make-local-variable 'whitespace-action) nil)))
 ;; =============
 ;; cmake mode
 ;; =============
 (require 'cmake-mode); Add cmake listfile names to the mode list.
 (setq auto-mode-alist
-	  (append
-	   '(("CMakeLists\\.txt\\'" . cmake-mode))
-	   '(("\\.cmake\\'" . cmake-mode))
-	   auto-mode-alist))
+      (append
+       '(("CMakeLists\\.txt\\'" . cmake-mode))
+       '(("\\.cmake\\'" . cmake-mode))
+       auto-mode-alist))
 
 ;; ==========================
 ;; for environment like path
@@ -493,8 +466,11 @@ If SUBMODE is not provided, use `LANG-mode' by default."
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(markdown-preview-style
-   "http://dakrone.github.io/org.css"))
+ '(custom-safe-themes
+   (quote
+    ("0788bfa0a0d0471984de6d367bb2358c49b25e393344d2a531e779b6cec260c5" "fbcdb6b7890d0ec1708fa21ab08eb0cc16a8b7611bb6517b722eba3891dfc9dd" "6998bd3671091820a6930b52aab30b776faea41449b4246fdce14079b3e7d125" "8db4b03b9ae654d4a57804286eb3e332725c84d7cdab38463cb6b97d5762ad26" "e87a2bd5abc8448f8676365692e908b709b93f2d3869c42a4371223aab7d9cf8" "38ba6a938d67a452aeb1dada9d7cdeca4d9f18114e9fc8ed2b972573138d4664" "2f00a1b3809f6e471d21742ba038146fc14c06ea9c31522a699953f7769e2836" default)))
+ '(irony-additional-clang-options (quote ("-std=c++11")))
+ '(markdown-preview-style "http://dakrone.github.io/org.css" t))
 
 (setq eww-search-prefix "http://www.google.co.jp/search?q=")
 (defvar eww-disable-colorize t)
