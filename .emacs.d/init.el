@@ -535,3 +535,28 @@ and set the focus back to Emacs frame"
                ("\\paragraph{%s}" . "\\paragraph*{%s}")
                ("\\subparagraph{%s}" . "\\subparagraph*{%s}")
                ))
+
+;;------------------------------------------------------
+;; マウス設定
+;;------------------------------------------------------
+(if window-system (progn
+;; 右ボタンの割り当て(押しながらの操作)をはずす。
+(global-unset-key [down-mouse-3])
+
+;; マウスの右クリックメニューを出す(押して、離したときにだけメニューが出る)
+(defun bingalls-edit-menu (event)
+  (interactive "e")
+  (popup-menu menu-bar-edit-menu))
+(global-set-key [mouse-3] 'bingalls-edit-menu)
+))
+
+;; -------------------------------------------------------------------------
+;; @multiple-cursors.el
+;;
+(require 'multiple-cursors)
+(global-set-key (kbd "C->") 'mc/mark-next-like-this)
+(global-set-key (kbd "C-M->") 'mc/skip-to-next-like-this)
+(global-set-key (kbd "C-<") 'mc/mark-previous-like-this)
+(global-set-key (kbd "C-c C-<") 'mc/mark-all-like-this)
+(global-unset-key (kbd "C-<down-mouse-1>"))
+(global-set-key (kbd "C-<mouse-1>") 'mc/add-cursor-on-click)
