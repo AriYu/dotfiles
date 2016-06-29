@@ -562,3 +562,70 @@ and set the focus back to Emacs frame"
 (global-set-key (kbd "C-c C-<") 'mc/mark-all-like-this)
 (global-unset-key (kbd "C-<down-mouse-1>"))
 (global-set-key (kbd "C-<mouse-1>") 'mc/add-cursor-on-click)
+
+;; -------------------------------------------------------------------------
+;; @pandoc-mode
+;;
+(add-hook 'markdown-mode-hook 'pandoc-mode)
+
+;; -------------------------------------------------------------------------
+;; @transform multi byte
+;; http://qiita.com/ShingoFukuyama/items/e425356d0b7c2041d164
+(defun my-replace-strings-in-region-by-list ($list)
+  "Replace strings in a region according to $list"
+  (if mark-active
+      (let* (($beg (region-beginning))
+             ($end (region-end))
+             ($word (buffer-substring-no-properties $beg $end)))
+        (mapc (lambda ($r)
+                (setq $word (replace-regexp-in-string (car $r) (cdr $r) $word)))
+              $list)
+        (delete-region $beg $end)
+        (insert $word))
+    (error "Need to make region")))
+;; 全角数字を半角数字に
+(defun my-convert-to-single-byte-number ()
+  "Convert multi-byte number in region into single-byte number"
+  (interactive)
+  (my-replace-strings-in-region-by-list
+   '(("１" . "1")
+     ("２" . "2")
+     ("３" . "3")
+     ("４" . "4")
+     ("５" . "5")
+     ("６" . "6")
+     ("７" . "7")
+     ("８" . "8")
+     ("９" . "9")
+     ("０" . "0"))))
+;; 半角数字を全角数字に
+(defun my-convert-to-multi-byte-number ()
+  "Convert multi-byte number in region into single-byte number"
+  (interactive)
+  (my-replace-strings-in-region-by-list
+   '(("1" ."１")
+     ("2" ."２")
+     ("3" ."３")
+     ("4" ."４")
+     ("5" ."５")
+     ("6" ."６")
+     ("7" ."７")
+     ("8" ."８")
+     ("9" ."９")
+     ("0" ."０"))))
+;; 句読点などの約物を半角に
+(defun my-convert-yakumono-to-half-width ()
+  "Replace multi byte punctuation marks to half width chars"
+  (interactive)
+  (my-replace-strings-in-region-by-list
+   '(("、" . "，")
+     ("。" . "．")
+     ("「" . "｢")
+     ("」" . "｣")
+     ("［" . "[")
+     ("］" . "]")
+     ("｛" . "{")
+     ("｝" . "}")
+     ("（" . "(")
+     ("）" . ")")
+     ("・" . "･"))))
