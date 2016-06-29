@@ -75,7 +75,7 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(default ((t (:family "Source Han Code JP Regular" :foundry "unknown" :slant normal :weight normal :height 110 :width normal))))
+ '(default ((t (:family "源ノ角ゴシック Code JP" :foundry "adobe" :slant normal :weight normal :height 113 :width normal))))
  '(whitespace-tab ((t (:foreground "dark gray" :underline t :weight bold)))))
 
 
