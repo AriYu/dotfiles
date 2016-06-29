@@ -75,7 +75,7 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(default ((t (:family "Source Han Code JP Regular" :foundry "unknown" :slant normal :weight normal :height 110 :width normal))))
+ '(default ((t (:family "源ノ角ゴシック Code JP" :foundry "adobe" :slant normal :weight normal :height 113 :width normal))))
  '(whitespace-tab ((t (:foreground "dark gray" :underline t :weight bold)))))
 
 
@@ -141,6 +141,8 @@
  :session nil "/org/gnome/evince/Window/0"
  "org.gnome.evince.Window" "SyncSource"
  'evince-inverse-search)
+
+(add-hook 'yatex-mode-hook '(lambda () (reftex-mode t)))
 
 ;;; popwin
 (require 'popwin)
@@ -470,7 +472,9 @@ If SUBMODE is not provided, use `LANG-mode' by default."
    (quote
     ("0788bfa0a0d0471984de6d367bb2358c49b25e393344d2a531e779b6cec260c5" "fbcdb6b7890d0ec1708fa21ab08eb0cc16a8b7611bb6517b722eba3891dfc9dd" "6998bd3671091820a6930b52aab30b776faea41449b4246fdce14079b3e7d125" "8db4b03b9ae654d4a57804286eb3e332725c84d7cdab38463cb6b97d5762ad26" "e87a2bd5abc8448f8676365692e908b709b93f2d3869c42a4371223aab7d9cf8" "38ba6a938d67a452aeb1dada9d7cdeca4d9f18114e9fc8ed2b972573138d4664" "2f00a1b3809f6e471d21742ba038146fc14c06ea9c31522a699953f7769e2836" default)))
  '(irony-additional-clang-options (quote ("-std=c++11")))
- '(markdown-preview-style "http://dakrone.github.io/org.css" t))
+ '(markdown-preview-style "http://dakrone.github.io/org.css" t)
+ '(show-paren-mode t)
+ '(tool-bar-mode nil))
 
 (setq eww-search-prefix "http://www.google.co.jp/search?q=")
 (defvar eww-disable-colorize t)
@@ -560,3 +564,70 @@ and set the focus back to Emacs frame"
 (global-set-key (kbd "C-c C-<") 'mc/mark-all-like-this)
 (global-unset-key (kbd "C-<down-mouse-1>"))
 (global-set-key (kbd "C-<mouse-1>") 'mc/add-cursor-on-click)
+
+;; -------------------------------------------------------------------------
+;; @pandoc-mode
+;;
+(add-hook 'markdown-mode-hook 'pandoc-mode)
+
+;; -------------------------------------------------------------------------
+;; @transform multi byte
+;; http://qiita.com/ShingoFukuyama/items/e425356d0b7c2041d164
+(defun my-replace-strings-in-region-by-list ($list)
+  "Replace strings in a region according to $list"
+  (if mark-active
+      (let* (($beg (region-beginning))
+             ($end (region-end))
+             ($word (buffer-substring-no-properties $beg $end)))
+        (mapc (lambda ($r)
+                (setq $word (replace-regexp-in-string (car $r) (cdr $r) $word)))
+              $list)
+        (delete-region $beg $end)
+        (insert $word))
+    (error "Need to make region")))
+;; 全角数字を半角数字に
+(defun my-convert-to-single-byte-number ()
+  "Convert multi-byte number in region into single-byte number"
+  (interactive)
+  (my-replace-strings-in-region-by-list
+   '(("１" . "1")
+     ("２" . "2")
+     ("３" . "3")
+     ("４" . "4")
+     ("５" . "5")
+     ("６" . "6")
+     ("７" . "7")
+     ("８" . "8")
+     ("９" . "9")
+     ("０" . "0"))))
+;; 半角数字を全角数字に
+(defun my-convert-to-multi-byte-number ()
+  "Convert multi-byte number in region into single-byte number"
+  (interactive)
+  (my-replace-strings-in-region-by-list
+   '(("1" ."１")
+     ("2" ."２")
+     ("3" ."３")
+     ("4" ."４")
+     ("5" ."５")
+     ("6" ."６")
+     ("7" ."７")
+     ("8" ."８")
+     ("9" ."９")
+     ("0" ."０"))))
+;; 句読点などの約物を半角に
+(defun my-convert-yakumono-to-half-width ()
+  "Replace multi byte punctuation marks to half width chars"
+  (interactive)
+  (my-replace-strings-in-region-by-list
+   '(("、" . "，")
+     ("。" . "．")
+     ("「" . "｢")
+     ("」" . "｣")
+     ("［" . "[")
+     ("］" . "]")
+     ("｛" . "{")
+     ("｝" . "}")
+     ("（" . "(")
+     ("）" . ")")
+     ("・" . "･"))))
