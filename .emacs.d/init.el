@@ -142,6 +142,8 @@
  "org.gnome.evince.Window" "SyncSource"
  'evince-inverse-search)
 
+(add-hook 'yatex-mode-hook '(lambda () (reftex-mode t)))
+
 ;;; popwin
 (require 'popwin)
 (popwin-mode 1)
