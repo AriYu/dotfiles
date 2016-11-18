@@ -1,0 +1,3 @@
+[submodule "/home/yuta/dotfiles/.emacs.d/github-markdown-css/"]
+	path = .emacs.d/github-markdown-css
+	url = https://github.com/sindresorhus/github-markdown-css.git

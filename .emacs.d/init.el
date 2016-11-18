@@ -102,6 +102,8 @@
 (setq YaTeX-inhibit-prefix-letter t)
 (setq YaTeX-kanji-code nil)
 (setq YaTeX-latex-message-code 'utf-8)
+(setq YaTeX-use-hilit19 nil)
+(setq YaTex-use-font-lock nil)
 ;; Yatexの自動改行をなしにする．
 (add-hook 'yatex-mode-hook
 		  '(lambda () (auto-fill-mode -1)))
@@ -115,6 +117,8 @@
 	     (auto-complete-mode t)
 	     (setq compile-command "latexmk -f") 
 	     ))
+
+
 ;; .latexmkrcファイルをperlモードで開く
 (add-to-list 'auto-mode-alist '("/\\.latexmkrc\\'" . perl-mode))
 ;;; inverse search
@@ -161,7 +165,12 @@
 (global-set-key (kbd "M-X") 'in-directory)
 
 ;; roslaunch highlighting
-(add-to-list 'auto-mode-alist '("\\.launch$" . xml-mode))
+(add-to-list 'auto-mode-alist '("\\.launch$" . nxml-mode))
+(add-hook 'nxml-mode-hook
+          (lambda ()
+            (setq auto-fill-mode -1)
+            ;; スラッシュの入力で終了タグを自動補完
+            (setq nxml-slash-auto-complete-flag t)))
 
 ;; shellに色をつける
 (add-hook 'compilation-mode-hook 'ansi-color-for-comint-mode-on)
@@ -263,8 +272,15 @@
   (setq web-mode-markup-indent-offset 2)
   (setq web-mode-css-indent-offset 2)
   (setq web-mode-code-indent-offset 2)
+  (setq web-mode-enable-auto-pairing nil)
   )
 (add-hook 'web-mode-hook 'my-web-mode-hook)
+(defun sp-web-mode-is-code-context (id action context)
+  (and (eq action 'insert)
+       (not (or (get-text-property (point) 'part-side)
+                (get-text-property (point) 'block-side)))))
+
+(sp-local-pair 'web-mode "<" nil :when '(sp-web-mode-is-code-context))
 
 ;; magit
 (global-set-key (kbd "C-x g") 'magit-status)
@@ -402,6 +418,9 @@
        '(("CMakeLists\\.txt\\'" . cmake-mode))
        '(("\\.cmake\\'" . cmake-mode))
        auto-mode-alist))
+(add-hook 'cmake-mode-hook '(lambda ()
+                              (setq-local electric-layout-rules '((?\) . after)))
+                              ))
 
 ;; ==========================
 ;; for environment like path
