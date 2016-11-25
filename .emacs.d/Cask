@@ -23,6 +23,7 @@
 (depends-on "gnuplot-mode")
 (depends-on "google-translate")
 (depends-on "helm")
+(depends-on "helm-projectile")
 (depends-on "htmlize")
 (depends-on "idle-highlight-mode")
 (depends-on "ido-ubiquitous")

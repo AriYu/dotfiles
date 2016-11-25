@@ -489,7 +489,7 @@ If SUBMODE is not provided, use `LANG-mode' by default."
  ;; If there is more than one, they won't work right.
  '(custom-safe-themes
    (quote
-    ("0788bfa0a0d0471984de6d367bb2358c49b25e393344d2a531e779b6cec260c5" "fbcdb6b7890d0ec1708fa21ab08eb0cc16a8b7611bb6517b722eba3891dfc9dd" "6998bd3671091820a6930b52aab30b776faea41449b4246fdce14079b3e7d125" "8db4b03b9ae654d4a57804286eb3e332725c84d7cdab38463cb6b97d5762ad26" "e87a2bd5abc8448f8676365692e908b709b93f2d3869c42a4371223aab7d9cf8" "38ba6a938d67a452aeb1dada9d7cdeca4d9f18114e9fc8ed2b972573138d4664" "2f00a1b3809f6e471d21742ba038146fc14c06ea9c31522a699953f7769e2836" default)))
+    ("40f6a7af0dfad67c0d4df2a1dd86175436d79fc69ea61614d668a635c2cd94ab" "0788bfa0a0d0471984de6d367bb2358c49b25e393344d2a531e779b6cec260c5" "fbcdb6b7890d0ec1708fa21ab08eb0cc16a8b7611bb6517b722eba3891dfc9dd" "6998bd3671091820a6930b52aab30b776faea41449b4246fdce14079b3e7d125" "8db4b03b9ae654d4a57804286eb3e332725c84d7cdab38463cb6b97d5762ad26" "e87a2bd5abc8448f8676365692e908b709b93f2d3869c42a4371223aab7d9cf8" "38ba6a938d67a452aeb1dada9d7cdeca4d9f18114e9fc8ed2b972573138d4664" "2f00a1b3809f6e471d21742ba038146fc14c06ea9c31522a699953f7769e2836" default)))
  '(irony-additional-clang-options (quote ("-std=c++11")))
  '(markdown-preview-style "http://dakrone.github.io/org.css" t)
  '(show-paren-mode t)
@@ -650,3 +650,34 @@ and set the focus back to Emacs frame"
      ("（" . "(")
      ("）" . ")")
      ("・" . "･"))))
+
+;; rosemacs
+(add-to-list 'load-path "/opt/ros/indigo/share/emacs/site-lisp")
+(require 'rosemacs-config)
+
+;; helm
+(require 'helm)
+;;(define-key helm-find-files-map (kbd "TAB") 'helm-execute-persistent-action)
+(define-key helm-map (kbd "TAB") 'helm-execute-persistent-action)
+(define-key global-map (kbd "C-x C-f") 'helm-find-files)
+(define-key global-map (kbd "<f1>") 'helm-find)
+;; 指定したディレクトリでhelm-findをやる 
+(defun in-directory-helm-find (dir)
+  "Runs execute-extended-command with default-directory set to the given directory."
+  (interactive "DIn directory: ")
+  (let ((default-directory dir))
+    (call-interactively 'helm-find)))
+(define-key global-map (kbd "C-<f1>") 'in-directory-helm-find)
+;; ディレクトリだったら補完する。ファイルだったら開く
+(defun fu/helm-find-files-navigate-forward (orig-fun &rest args)
+  (if (file-directory-p (helm-get-selection))
+      (apply orig-fun args)
+    (helm-maybe-exit-minibuffer)))
+(advice-add 'helm-execute-persistent-action :around #'fu/helm-find-files-navigate-forward)
+(define-key helm-find-files-map (kbd "<return>") 'helm-execute-persistent-action)
+;; バックスペースでディレクトリだったら一段分戻る
+(defun fu/helm-find-files-navigate-back (orig-fun &rest args)
+  (if (= (length helm-pattern) (length (helm-find-files-initial-input)))
+      (helm-find-files-up-one-level 1)
+    (apply orig-fun args)))
+(advice-add 'helm-ff-delete-char-backward :around #'fu/helm-find-files-navigate-back)
