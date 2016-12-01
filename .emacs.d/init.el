@@ -657,7 +657,7 @@ and set the focus back to Emacs frame"
 
 ;; helm
 (require 'helm)
-;;(define-key helm-find-files-map (kbd "TAB") 'helm-execute-persistent-action)
+(require 'helm-config)
 (define-key helm-map (kbd "TAB") 'helm-execute-persistent-action)
 (define-key global-map (kbd "C-x C-f") 'helm-find-files)
 (define-key global-map (kbd "<f1>") 'helm-find)
@@ -674,7 +674,7 @@ and set the focus back to Emacs frame"
       (apply orig-fun args)
     (helm-maybe-exit-minibuffer)))
 (advice-add 'helm-execute-persistent-action :around #'fu/helm-find-files-navigate-forward)
-(define-key helm-find-files-map (kbd "<return>") 'helm-execute-persistent-action)
+(define-key helm-map (kbd "<return>") 'helm-execute-persistent-action)
 ;; バックスペースでディレクトリだったら一段分戻る
 (defun fu/helm-find-files-navigate-back (orig-fun &rest args)
   (if (= (length helm-pattern) (length (helm-find-files-initial-input)))
