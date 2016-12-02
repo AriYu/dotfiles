@@ -668,8 +668,8 @@ and set the focus back to Emacs frame"
      ("・" . "･"))))
 
 ;; rosemacs
-(add-to-list 'load-path "/opt/ros/indigo/share/emacs/site-lisp")
-(require 'rosemacs-config)
+;;(add-to-list 'load-path "/opt/ros/indigo/share/emacs/site-lisp")
+;;(require 'rosemacs-config)
 
 ;; helm
 (require 'helm)
