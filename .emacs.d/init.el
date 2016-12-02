@@ -214,7 +214,8 @@
 
 
 ;;; color-theme
-(load-theme 'monokai t)
+;;(load-theme 'monokai t)
+(load-theme 'spacemacs-dark t)
 ;;(set-frame-parameter nil 'background-mode 'dark)
 ;;(load-theme 'solarized t)
 ;;(add-to-list 'custom-theme-load-path "~/.emacs.d/theme/")
