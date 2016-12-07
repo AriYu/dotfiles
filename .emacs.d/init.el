@@ -703,3 +703,7 @@ and set the focus back to Emacs frame"
       (helm-find-files-up-one-level 1)
     (apply orig-fun args)))
 (advice-add 'helm-ff-delete-char-backward :around #'fu/helm-find-files-navigate-back)
+
+;; dashboard 起動時の画面をspacemacs風にする
+(dashboard-setup-startup-hook)
+(setq dashboard-items '((recents  . 10)))
