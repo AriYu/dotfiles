@@ -2,7 +2,8 @@
 (when (or (require 'cask "~/.cask/cask.el" t)
 	  (require 'cask nil t))
   (cask-initialize))
-
+;; loadpathの追加　meplaとかに無いやつ
+(setq load-path (cons "~/.emacs.d/elisp" load-path))
 (require 'use-package)
 (pallet-mode t)
 
