@@ -146,13 +146,15 @@
  :session nil "/org/gnome/evince/Window/0"
  "org.gnome.evince.Window" "SyncSource"
  'evince-inverse-search)
-
+;; reftex 使う
 (add-hook 'yatex-mode-hook '(lambda () (reftex-mode t)))
-
+(setq reftex-toc-split-windows-horizontally t)
 ;;; popwin
 (require 'popwin)
 (popwin-mode 1)
 (setq display-buffer-function 'popwin:display-buffer)
+(require 'popwin-yatex)
+(push '("*YaTeX-typesetting*") popwin:special-display-config)
 
 ;;コンパイル画面でスクロールする
 (setq compilation-scroll-output t)
