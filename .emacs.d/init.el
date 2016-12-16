@@ -224,11 +224,12 @@
 ;;(add-to-list 'custom-theme-load-path "~/.emacs.d/theme/")
 ;;(load-theme 'molokai t)
 ;; powerline theme
-(require 'powerline)
-(powerline-default-theme)
-(require 'airline-themes)
-(load-theme 'airline-powerlineish t)
-
+;; (require 'powerline)
+;; (powerline-default-theme)
+;; (require 'airline-themes)
+;; (load-theme 'airline-powerlineish t)
+(require 'spaceline-config)
+(spaceline-spacemacs-theme)
 ;; 画面の下の方を綺麗にする
 ;; (require 'powerline)
 ;; (powerline-default-theme)
