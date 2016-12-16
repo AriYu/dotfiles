@@ -60,6 +60,7 @@
 (depends-on "smartparens")
 (depends-on "smex")
 (depends-on "smooth-scroll")
+(depends-on "spaceline")
 (depends-on "spacemacs-theme")
 (depends-on "use-package")
 (depends-on "web-mode")
